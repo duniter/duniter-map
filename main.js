@@ -8,7 +8,9 @@ const http    = require('http');
 const path    = require('path');
 const express = require('express');
 const geoip   = require('geoip-lite');
+const natUpnp = require('nnupnp');
 
+var upnpClient = natUpnp.createClient();
 
 const HOME_DUNITER_DATA_FOLDER = 'duniter_map';
 
@@ -26,11 +28,22 @@ duniter.statics.logger.mute();
 
 duniter.statics.cli((duniterServer) => co(function*() {
 
+	const HOST = 'localhost';
+	const PORT = 10500;
+
 	try {
 
 	const app = express();
-	const HOST = 'localhost';
-	const PORT = 10500;
+
+	var r = upnpClient.portMapping({
+		'public': PORT,
+		'private': PORT,
+		ttl: 10
+	}, function(err) {
+		// Will be called once finished
+		console.log(err);
+	});
+	console.log(r);
 
 	var peerTable = {};
 
@@ -173,6 +186,8 @@ duniter.statics.cli((duniterServer) => co(function*() {
 
 	} catch (e) {
 		console.error(e);
+		console.log('Removing UPnP NAT mapping...');
+		upnpClient.portUnmapping({'public': PORT});
 		process.exit(1);
 	}
 }));

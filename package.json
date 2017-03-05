@@ -17,7 +17,8 @@
     "morgan": "1.7.0",
     "q": "1.4.1",
     "request-promise": "3.0.0",
-    "geoip-lite": "1.1.9"
+    "geoip-lite": "1.1.9",
+    "nnupnp": "1.0.2"
   },
   "author": "François Revol <revol@free.fr>",
   "license": "GPLv3",
