@@ -2,7 +2,7 @@
   "name": "duniter-map",
   "version": "1.0.0",
   "description": "Generates a Leaflet.JS map of Duniter nodes",
-  "main": "main.js",
+  "main": "index.js",
   "scripts": {
     "test": "mocha tests.js"
   },
