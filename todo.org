@@ -1,6 +1,7 @@
+* TODO fix host address handling (external IP vs 0.0.0.0)
 * TODO use markercluster plugin?
 https://github.com/mmuman/duniter-map/issues/1
 https://github.com/Leaflet/Leaflet.markercluster
 http://stackoverflow.com/questions/22168558/multiple-marker-on-exact-same-position-on-a-leaflet-map
 https://github.com/Leaflet/Leaflet.markercluster/issues/345
-
+* TODO add a "share" link with the iframe code?
