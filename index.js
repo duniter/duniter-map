@@ -26,6 +26,7 @@ const DEFAULT_PORT = 10500;
 var SERVER_HOST;
 var SERVER_PORT;
 var peerTable = {};
+var upnpInterval = null;
 
 function inPeers(pubkey) {
   if (pubkey in peerTable)
@@ -50,6 +51,17 @@ function addPeer(pubkey, geo, addresses, port, status) {
   };
 }
 
+function upnpMapPort() {
+  upnpClient.portMapping({
+    'public': SERVER_PORT,
+    'private': SERVER_PORT,
+    ttl: 600
+  }, function(err) {
+    // Will be called once finished
+    console.log(err);
+  });
+}
+
 const stack = duniter.statics.autoStack([{
   name: 'duniter-map',
   required: {
@@ -70,15 +82,8 @@ const stack = duniter.statics.autoStack([{
           SERVER_HOST = params[0] || DEFAULT_HOST;
           SERVER_PORT = parseInt(params[1]) || DEFAULT_PORT;
 
-          var r = upnpClient.portMapping({
-            'public': SERVER_PORT,
-            'private': SERVER_PORT,
-            ttl: 10
-          }, function(err) {
-            // Will be called once finished
-            console.log(err);
-          });
-          console.log(r);
+          upnpMapPort();
+          upnpInterval = setInterval(upnpMapPort, 1000*300);
 
           console.log("Resolving initial known peers...");
           try {
@@ -189,6 +194,8 @@ co(function*() {
   // Execute our program
   yield stack.executeStack(process.argv);
   console.log('Removing UPnP NAT mapping...');
+  if (upnpInterval)
+    clearInterval(upnpInterval);
   upnpClient.portUnmapping({'public': SERVER_HOST});
   // End
   process.exit();
