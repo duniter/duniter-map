@@ -1,6 +1,7 @@
 * TODO fix host address handling (external IP vs 0.0.0.0)
-* TODO add a "share" link with the iframe code? using current bounds
-* TODO allow passing bounds as parameters for the iframe
+* DONE add a "share" link with the iframe code? using current bounds
+* DONE allow passing bounds as parameters for the iframe
+* TODO add UP and DOWN layers?
 * TODO use markercluster plugin?
 https://github.com/mmuman/duniter-map/issues/1
 https://github.com/Leaflet/Leaflet.markercluster
