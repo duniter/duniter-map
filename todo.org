@@ -1,0 +1,6 @@
+* TODO use markercluster plugin?
+https://github.com/mmuman/duniter-map/issues/1
+https://github.com/Leaflet/Leaflet.markercluster
+http://stackoverflow.com/questions/22168558/multiple-marker-on-exact-same-position-on-a-leaflet-map
+https://github.com/Leaflet/Leaflet.markercluster/issues/345
+
