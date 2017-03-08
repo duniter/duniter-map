@@ -2,7 +2,7 @@ var map;
 var sharePopup;
 
 function share_popup() {
-	var url= document.location;//'http://88.162.208.159:10500/';
+	var url= document.URL;//'http://88.162.208.159:10500/';
 	var html = 'You can insert this map on your website with the following code:<textarea id="share_duniter_map_code" rows="4" cols="40" readonly><iframe width="300" height="300" src="'+url+'"></iframe></textarea>'
 	var point = map.getCenter();
 	point.lat = (2 * map.getBounds().getSouth() + map.getBounds().getNorth()) / 3;
@@ -67,6 +67,20 @@ function initialize_map() {
 				return t;
 			}).addTo(map);
 			var bounds = g.getBounds();
+			// check for a ?bbox= URI query (same syntax as OSM)
+			if (document.location.search) {
+				var query = window.location.search.substring(1);
+				var vars = query.split('&');
+				for (var i = 0; i < vars.length; i++) {
+					var pair = vars[i].split('=');
+					if (decodeURIComponent(pair[0]) == 'bbox') {
+						var bbox = decodeURIComponent(pair[1]).split(',');
+						bounds = L.latLngBounds([
+							[parseFloat(bbox[1]), parseFloat(bbox[0])],
+							[parseFloat(bbox[3]), parseFloat(bbox[2])]]);
+					}
+				}
+			}
 			if (bounds) {
 				bounds.pad(2);
 				map.fitBounds(bounds);
