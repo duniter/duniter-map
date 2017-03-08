@@ -1,10 +1,26 @@
+var map;
+var sharePopup;
+
+function share_popup() {
+	var url= document.location;//'http://88.162.208.159:10500/';
+	var html = 'You can insert this map on your website with the following code:<textarea id="share_duniter_map_code" rows="4" cols="40" readonly><iframe width="300" height="300" src="'+url+'"></iframe></textarea>'
+	var point = map.getCenter();
+	point.lat = (2 * map.getBounds().getSouth() + map.getBounds().getNorth()) / 3;
+	sharePopup.setLatLng(point)
+		.setContent(html)
+		.openOn(map);
+	var e = document.getElementById('share_duniter_map_code');
+	e.select();
+	return false;
+}
 
 function initialize_map() {
-    var map = L.map('duniter-leaflet-map');
+    map = L.map('duniter-leaflet-map');
+	sharePopup = L.popup();
 
     // TODO make tile server configurable.
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-	attribution: '<a href="https://github.com/mmuman/duniter-map">Duniter-map</a> | &#169; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+	attribution: '<a href="https://github.com/mmuman/duniter-map">Duniter-map</a> (<a href="#" onclick="return share_popup();">share</a>) | &#169; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 	map.fitWorld();
 
