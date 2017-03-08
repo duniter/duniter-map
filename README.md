@@ -4,6 +4,8 @@ Creates a [Duniter](http://en.duniter.org/) node providing a map of all the node
 
 *Génère une carte des noeuds du réseau [Duniter](http://fr.duniter.org/), en utilisant [Leaflet](http://leafletjs.com/) et les [tuiles OpenStreetMap](https://wiki.openstreetmap.org/wiki/Tiles#Servers).*
 
+![screenshot](shot_duniter_map.png)
+
 ### 1. Clone the repository
 
 First, make a checkout: 
