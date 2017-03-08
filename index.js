@@ -28,13 +28,15 @@ var SERVER_PORT;
 var peerTable = {};
 var upnpInterval = null;
 
-function inPeers(pubkey) {
-  if (pubkey in peerTable)
+function inPeers(pubkey, ipv4, ipv6) {
+  var k = ipv4 || ipv6;
+  if (k in peerTable)
     return true;
   return false;
 }
-function addPeer(pubkey, geo, addresses, port, status) {
-  peerTable[pubkey] = {
+function addPeer(pubkey, ipv4, ipv6, geo, addresses, port, status) {
+  var k = ipv4 || ipv6;
+  peerTable[k] = {
      "type": "Feature",
     "geometry": {
       "type": "Point",
@@ -93,14 +95,14 @@ const stack = duniter.statics.autoStack([{
             for (data of peers) {
               //var data = peers[pe];
               var status = data.status;
-              var ipv4 = null;
-              var ipv6 = null;
-              var addresses = [];
-              var port = "0";
-              var ep;
               //TODO: try next one if first resolve failed
               //TODO: handle IPv6 as well
               for (ep of data.endpoints) {
+                var ipv4 = null;
+                var ipv6 = null;
+                var addresses = [];
+                var port = "0";
+                var ep;
                 var s;
                 var eps = ep.split(' ');
                 if (eps.shift() != 'BASIC_MERKLED_API')
@@ -113,19 +115,19 @@ const stack = duniter.statics.autoStack([{
                   if (s.match(/^[0-9a-fA-F]{1,4}:/))
                     ipv6 = s;
                 }
-              }
-              //console.log(addresses);
-              //console.log(ipv4);
-              //console.log(ipv6);
-              if ((ipv4 || ipv6) && !inPeers(data.pubkey)) {
-                var geo = null;
-                if (ipv4)
-                  geo = geoip.lookup(ipv4);
-                else if (ipv6)
-                  geo = geoip.lookup(ipv6);
-                //console.log(geo);
-                if (geo)
-                  addPeer(data.pubkey, geo, addresses, port, status);
+                //console.log(addresses);
+                //console.log(ipv4);
+                //console.log(ipv6);
+                if ((ipv4 || ipv6) && !inPeers(data.pubkey, ipv4, ipv6)) {
+                  var geo = null;
+                  if (ipv4)
+                    geo = geoip.lookup(ipv4);
+                  else if (ipv6)
+                    geo = geoip.lookup(ipv6);
+                  //console.log(geo);
+                  if (geo)
+                    addPeer(data.pubkey, ipv4, ipv6, geo, addresses, port, status);
+                }
               }
             }
           } catch (e) {
@@ -160,7 +162,7 @@ const stack = duniter.statics.autoStack([{
                 //console.log(addresses);
                 //console.log(ipv4);
                 //console.log(ipv6);
-                if ((ipv4 || ipv6) && !inPeers(data.pubkey)) {
+                if ((ipv4 || ipv6) && !inPeers(data.pubkey, ipv4, ipv6)) {
                   var geo = null;
                   if (ipv4)
                     gep = geoip.lookup(ipv4);
@@ -168,7 +170,7 @@ const stack = duniter.statics.autoStack([{
                     gep = geoip.lookup(ipv6);
                   //console.log(geo);
                   if (geo)
-                    addPeer(data.pubkey, geo, addresses, port, "UP");
+                    addPeer(data.pubkey, ipv4, ipv6, geo, addresses, port, "UP");
                 }
               }
               else if (data.documentType == 'block')
