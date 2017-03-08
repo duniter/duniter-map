@@ -4,7 +4,7 @@ function initialize_map() {
 
     // TODO make tile server configurable.
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-	attribution: '&#169; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+	attribution: '<a href="https://github.com/mmuman/duniter-map">Duniter-map</a> | &#169; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 	map.fitWorld();
 
