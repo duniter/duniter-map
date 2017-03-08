@@ -2,10 +2,13 @@ var map;
 var sharePopup;
 
 function share_popup() {
-	var url= document.URL;//'http://88.162.208.159:10500/';
+	var url= document.location.origin;
+	var bounds = map.getBounds();
+	var query = '?bbox=' + encodeURIComponent([bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()].join(','));
+	url += query;
 	var html = 'You can insert this map on your website with the following code:<textarea id="share_duniter_map_code" rows="4" cols="40" readonly><iframe width="300" height="300" src="'+url+'"></iframe></textarea>'
 	var point = map.getCenter();
-	point.lat = (2 * map.getBounds().getSouth() + map.getBounds().getNorth()) / 3;
+	point.lat = (2 * bounds.getSouth() + bounds.getNorth()) / 3;
 	sharePopup.setLatLng(point)
 		.setContent(html)
 		.openOn(map);
